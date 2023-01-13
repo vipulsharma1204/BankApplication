@@ -14,7 +14,7 @@ class UserDetail(models.Model):
     motherName=models.fields.CharField(max_length=50, default="")            
     fatherName=models.fields.CharField(max_length=50, default="")         
     zipCode=models.fields.IntegerField(default=800000)            
-    dateOfBirth=models.fields.DateField(default=000)          
+    dateOfBirth=models.fields.DateField(default="1905-01-01")          
     panNumber=models.fields.CharField(max_length=10, default="AXXXXXXXXX")            
     aadhaarNumber=models.fields.BigIntegerField(default="999_999_999_999")            
     occupation=models.fields.CharField(max_length=50, default="")

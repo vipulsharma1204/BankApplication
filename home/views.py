@@ -16,12 +16,12 @@ from datetime import*
 
 # path("login", views.login, name='login'),
 def login(request):
-    return render(request, 'VIEWS/login.html', {} )
+    return render(request, 'VIEWS/login.html', {"":""} )
 
 
 # path("home", views.home, name='home'),
 def home(request):
-    return render(request, 'VIEWS/home.html')
+    return render(request, 'VIEWS/home.html',{"":""})
 
 
 def Formpage(request):
@@ -40,7 +40,7 @@ def Formpage(request):
             
             
         mname=request.POST.get('middlename',"")
-        if not bool(re.match("^[a-zA-Z]{4,56}$", mname)):
+        if not bool(re.match("^[a-zA-Z]{0,56}$", mname)):
             return render(request, "VIEWS/form.html", {"error":"Please enter your corret middle name."})
         
         lname=request.POST.get('lastName',"")
@@ -57,8 +57,6 @@ def Formpage(request):
             
         
         address=request.POST.get('address',"")
-        if not bool(re.match("^[a-zA-Z- ]{20,256}$", address)):
-            return render(request, "VIEWS/form.html", {"error":"Please enter your Address."})
         
         mothername=request.POST.get('motherName',"")
         if not bool(re.match("^[a-zA-Z ]{6,128}$", mothername)):
@@ -77,11 +75,11 @@ def Formpage(request):
                 
         PAN=request.POST.get('panNumber',"")
         if len(PAN)!=10:
-            return render(request, "VIEWS/Signup.html", {"error":"Enter correct PAN NUmber. "})
+            return render(request, "VIEWS/form.html", {"error":"Enter correct PAN NUmber. "})
             
         aadhaar=request.POST.get('aadhaarNumber',"")
         if len(aadhaar)!=12:
-            return render(request, "VIEWS/Signup.html", {"error":"Enter correct Aadhaar Number. "})
+            return render(request, "VIEWS/form.html", {"error":"Enter correct Aadhaar Number. "})
             
         occ=request.POST.get('occ.',"")
         if not bool(re.match("^[a-zA-Z]{4,128}$", occ)):
@@ -117,7 +115,11 @@ def Formpage(request):
             myuser.RELATION=relation         
             myuser.accountType=accounttype
             myuser.save()
-        return render((request, "VIEWS/home.html", {""}))
+    return render(request, 'VIEWS/home.html')
+    # return redirect(home)
+    # return render(request, "VIEWS/home.html", {"":""})
+    # return render(request, "VIEWS/home.html", {"username":lname+", "+fname})
+
 
         
         
@@ -168,7 +170,7 @@ def handlesignup(request):
         elif len(password)>=64:
             return render(request, "VIEWS/Signup.html", {"error":"Password length mist be less than 64 character"})
         elif not password.isalnum():
-            return render((request, "VIEWS/Signup.html", {"error":"Please set a password which contains alphanumeric"}))
+            return render(request, "VIEWS/Signup.html", {"error":"Please set a password which contains alphanumeric"})
             
             
             
@@ -183,7 +185,6 @@ def handlesignup(request):
             myuser.lastname=lname
             myuser.Email=email
             myuser.save()
-            # messages.success(request,"your account is successfully created")
             return render(request, "VIEWS/form.html", {"error":""})
     return redirect(login)
         
