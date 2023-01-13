@@ -1,0 +1,15 @@
+body{
+    background-color: teal;
+    font-family: Arial, Helvetica, sans-serif;
+}
+#logindiv{
+    background-color: 0,72,83;
+    color:white;
+    width: 400px;
+    overflow: hidden;
+    margin: 20 0 0 450px;
+    padding: 80px;
+    background-color: antiquewhite;
+    border-radius: 20px;
+
+}

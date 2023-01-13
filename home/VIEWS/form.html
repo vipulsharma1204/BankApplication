@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        #errorMessage{
+            text-align: center;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style></style>
+</head>
+<script>
+    var resetForm = function(){
+      document.getElementById("errorMessage").innerHTML = "";
+    }
+  </script>
+<body>
+    <div>
+        <form method="POST">
+        <label id="errorMessage", style="color: red;">{{error}}</label><br><br>
+
+        <label for="text">courtesy titles</label>
+        <select name = "courtsey">
+            <option value = "Mrs.", name="Mrs." selected>Mrs.</option>
+            <option value = "Mr.", name="Mr.">Mr.</option>
+            <option value = "Ms.", name="Ms." >Ms.</option>
+            </select><br><br>
+
+
+        <label for="firstName">First Name: </label>
+        <input type="text", name="firstName", placeholder="Enter your first name", required><br><br>
+
+
+        <label for="middlename">Middle Name:</label>
+        <input type="text", name="middlename", placeholder="Enter your Middle name",><br><br>
+
+
+        <label for="lastName">Last Name:</label>
+        <input type="text", name="lastName", placeholder="Enter your last name", required><br><br>
+
+
+        <label for="conatct">Contact</label>
+        <input type="text" name="contact"><br><br>
+
+
+        <label for="altconatct">Alternate Contact</label>
+        <input type="text" name="alternatenumber"><br><br>
+
+
+        <label for="address">Address:</label>
+        <input type="text", name="address", placeholder="Enter your address", required><br><br>
+
+
+        <label for="middlename">Mother's Name:</label>
+        <input type="text", name="motherName", placeholder="Enter your Mother's name", required><br><br>
+
+
+        <label for="firstName">Father's Name:</label>
+        <input type="text", name="fatherName", placeholder="Enter your Father's name", required><br><br>
+
+
+        <label for="zipcode">Zip Code:</label>
+        <input type="Number", name="pinCode", placeholder="Enter your Zip Code", required><br><br>
+
+
+        <label for="dob">D.O.B:</label>
+        <input type="date", name="dob" id="dob" onchange="updateAccountType(this)" placeholder="Enter your Date Of Birth", required><br><br>
+
+
+        <label for="panNumber">PAN Number:</label>
+        <input type="text", name="panNumber", placeholder="Enter your PAN Number", required><br><br>
+
+
+        <label for="aadhaarNumber">Aadhaar Number:</label>
+        <input type="number", name="aadhaarNumber", placeholder="Enter your Aadhaar Number", required><br><br>
+
+
+        <label for="occ.">Occupation:</label>
+        <input type="text", name="occ.", placeholder="what's your Occupation", required><br><br>
+
+
+        <label for="relation">Relationship with Applicant</label>
+        <input type="text", name="relation", placeholder="what's your Relationship with Applicant", required><br><br>
+
+
+        <h6 style="font-family:Arial, Helvetica, sans-serif;">*For legal guardian(guardian appointed by court) else copy of the court order. <br><h5><b>Facilities required (Please mark in appropriatebox/es):</b></h5></h6>
+        
+
+        <label for="title">Memeber Type:</label>
+        <select name="MemeberType" id="MemeberType">
+            <option value = "Minor", name="Minor">Minor</option>
+            <option value = "Sr. Citizen", name="Sr. Citizen">Sr. Citizen</option>
+            <option value = "Staff (PF No.)", name="Staff (PF No.)" >Staff (PF No.)</option>
+            <option value = "Pensioner", name="Pensioner" >Pensioner</option>
+            <option value = "NRI", name="foreign" >NRI</option>
+            <option value="NRE" name="NRE">NRE</option>
+            <option value="NRO" name="NRO">NRO</option>
+            <option value="FCNR" name="FCNR">FCNR</option>
+            <option value = "Trust/HUF", name="TH" >Trust/HUF</option>
+            <option value = "General", name="General" >General</option>
+
+        </select><br><br> -->
+
+        <label for="text">Relationship</label>
+        <select name="relationship" id="relationship" onchange="">
+        <option value="self", name="self">self</option>
+        <option value="mother", name="mother">mother</option>
+        <option value="Father", name="Father">Father</option>
+        <option value="husband", name="husband">husband</option>
+        <option value="wife", name="wife">wife</option>
+        <option value="grandmother", name="grandmother">grandmother</option>
+        <option value="grandfather", name="grandfather">grandfather</option>
+        </select>
+
+
+        <input type="reset" value="Reset Form" onclick="resetForm()"> <input type="submit" value="submit"><br><br>
+        {% csrf_token %}    
+    </form>
+    </div>
+</body>
+<script>
+    var updateAccountType = () => {
+        let dt = document.getElementById("dob").value
+        let diff = (new Date() - new Date(dt))/(1000*3600*24*365);
+        if(diff<18){
+            document.getElementById("Memeber_Type").value = "Minor";
+        }
+        else if(diff>59 && diff<80){
+            document.getElementById("Memeber_Type").value = "Sr. Citizen";
+        }
+        
+    }
+</script>
+</html>
