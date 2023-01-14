@@ -1,7 +1,5 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.password_validation import validate_password
-
-# from home.models import Contact
 from django.contrib import messages
 from home.models import UserDetail
 from django.contrib.auth.models import User
@@ -29,6 +27,7 @@ def form(request):
         fname=request.POST.get('firstName',"")
         mname=request.POST.get('middlename',"")
         lname=request.POST.get('lastName',"")
+        email=request.POST.get('email',"")
         contact=str(request.POST.get('contact',""))
         alternatenumber=str(request.POST.get('alternatenumber',""))        
         address=request.POST.get('address',"")
@@ -38,59 +37,29 @@ def form(request):
         dob=request.POST.get('dob',"")
         PAN=request.POST.get('panNumber',"")
         aadhaar=request.POST.get('aadhaarNumber',"")
-        occupation=request.POST.get('occupation.',"")
+        occupation=request.POST.get('occupation',"")
         relation=request.POST.get('relation',"")
-        accounttype=request.POST.get('MemeberType',"")
-        
-        if not bool(re.match("^[a-zA-Z]{2,56}$", fname)):
-            return render(request, "VIEWS/form.html", {"error":"First name should be between 2 to 56 chars"})  
-            
-        if mname!=None and not bool(re.match("^[a-zA-Z]{0,56}$", mname)):
-            return render(request, "VIEWS/form.html", {"error":"Middle name should be between 2 to 56 chars"})
-        
-        if not bool(re.match("^[a-zA-Z]{2,56}$", lname)):
-            return render(request, "VIEWS/form.html", {"error":"Last name should be between 2 to 56 chars."})        
-        
-        if not bool(re.match("^[a-zA-Z, ]{2,128}$", mothername)):
-            return render(request, "VIEWS/form.html", {"error":"Mothers name should be between 2 to 128 chars."})
-        
-        if not bool(re.match("^[a-zA-Z, ]{2,128}$", fatherName)):
-            return render(request, "VIEWS/form.html", {"error":"Fathers name should be between 2 to 128 chars"})
-        
-        if not bool(re.match("^[\d]{4,10}$", pincode)):
-            return render(request, "VIEWS/form.html", {"error":"Pin code should be of 4 to 10 digits"})
-            
-        if len(PAN)!=10:
-            return render(request, "VIEWS/form.html", {"error":"PAN Number should be of exactly 10  digits"})
-            
-        if len(aadhaar)!=12:
-            return render(request, "VIEWS/form.html", {"error":"Aadhaar number should be of 12 digits"})
-            
-        if len(occupation)<2 and len(occupation)>128:
-            return render(request, "VIEWS/form.html", {"error":"Occupation should  be of length 2 to 128 chars"})
-            
-        if len(relation)<2 and len(relation)>128:
-            return render(request, "VIEWS/form.html", {"error":"Relation should be of length 2 to 128 chars"})
-
+        accounttype=request.POST.get('MemeberType',"")    
         myuser = UserDetail()
-        myuser.nameprefix=namePrefix    
+        myuser.namePrefix=namePrefix    
         myuser.firstName=fname            
-        myuser.middlename=mname           
-        myuser.lastName=lname 
-        myuser.phoneNo=contact
+        myuser.middleName=mname           
+        myuser.lastName=lname
+        myuser.email=email 
+        myuser.phoneNumber=contact
         myuser.alternatePhoneNumber=alternatenumber           
         myuser.address=address            
         myuser.motherName=mothername            
-        myuser.Fathername=fatherName         
-        myuser.zipcode=pincode            
+        myuser.fatherName=fatherName         
+        myuser.zipCode=pincode            
         myuser.dateOfBirth=dob            
         myuser.panNumber=PAN            
         myuser.aadhaarNumber=aadhaar        
         myuser.occupation=occupation            
-        myuser.RELATION=relation         
+        myuser.relation=relation         
         myuser.accountType=accounttype
         myuser.save()
-        return render(request, 'VIEWS/home.html')
+        return render(request, 'VIEWS/home.html', {"username":myuser.username})
 
 def signup(request):
     if request.method=="GET":
