@@ -9,12 +9,49 @@
 <body>
     <table>
         <thead>
-            <tr><td>User Name</td><td>First Name</td><td>Last Name</td></tr>
+            <tr>
+                <td>Name Prefix</td>
+                <td>User Name</td>
+                <td>First Name</td>
+                <td>Last Name</td>
+                <td>Username</td>
+                <td>Email Id</td>
+                <td>Phone Number</td>
+                <td>Alt. Phone Number</td>
+                <td>Address</td>
+                <td>Mother Name</td>
+                <td>Father Name</td>
+                <td>Zip Code</td>
+                <td>Date of Birth</td>
+                <td> PAN Number</td>
+                <td>Aadhaar Number</td>
+                <td>Occupation</td>
+                <td>Relation</td>
+                <td>Account Type</td>
+            </tr>
         </thead>
         <tbody>
             {% for user in users %}
             <tr>
-                <td>{{user.username}}</td><td>{{user.firstName}}</td><td>{{user.lastName}}</td>
+                <td>{{user.namePrefix}}</td>
+                <td>{{user.firstName}}</td>
+                <td>{{user.middleName}}</td>
+                <td>{{user.lastName}}</td>
+                <td>{{user.username}}</td>
+                <td>{{user.email}}</td>
+                <td>{{user.phoneNumber}}</td>
+                <td>{{user.alternatePhoneNumber}}</td>
+                <td>{{user.address}}</td>
+                <td>{{user.motherName}}</td>
+                <td>{{user.fatherName}}</td>
+                <td>{{user.zipCode}}</td>
+                <td>{{user.dateOfBirth}}</td>
+                <td>{{user.panNumber}}</td>
+                <td>{{user.aadhaarNumber}}</td>
+                <td>{{user.occupation}}</td>
+                <td>{{user.relation}}</td>
+                <td>{{user.relation}}</td>
+                
             </tr>
             {% endfor %}
         </tbody>

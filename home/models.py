@@ -2,7 +2,8 @@ from django.db import models
 # Create your models here.
 class UserDetail(models.Model):
                
-    namePrefix=models.fields.CharField(max_length=4, default="Mr.")         
+    namePrefix=models.fields.CharField(max_length=4, default="Mr.")
+            
     firstName=models.fields.CharField(max_length=50, default="")            
     middleName=models.fields.CharField(max_length=50, default="")           
     lastName=models.fields.CharField(max_length=50, default="")

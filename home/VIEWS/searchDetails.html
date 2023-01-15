@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Details</title>
+    <style>
+        td{
+            border-width: 2px;
+        }
+        table{
+            border-width: 4px;
+        }
+        div{
+            text-align: center;
+
+            color: white;
+            width: fit-content;
+            overflow: hidden;
+            margin: 40 50 80 450px;
+            padding: 10%;
+            background-color: rgb(13, 201, 207);
+            border-radius: 20px;
+            
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+        }
+    </style>
+</head>
+<script>
+    var resetForm = function () {
+        document.getElementById("searchTable").style.visibility = "hidden";
+    }
+    var showTable = function () {
+
+        document.getElementById("searchTable").style.visibility = "visible";
+        Object.freeze(showTable());
+    }
+</script>
+
+<body style="background-color:teal ;">
+    <h1>Search Details</h1>
+    <form method="POST" action="searchDetails">
+        <label for="search" , required>Search by:</label>
+        <select name="searchby">
+            <option value="accountNumber" id="accountNumber" selected> Account Number
+            <option value="phoneNumber" id="phoneNumber"> Phone Number</option>
+            <option value="name" id="name"> Name</option>
+            <option value="panNumber" id="panNumber"> PAN Number</option>
+            <option value="aadhaarNumber" id="aadhaarNumber"> Aadhaar Number</option>
+        </select>
+        <input type="text" , name="details" , id="details" placeholder="Enter the details."><br><br><br>
+
+        <input type="reset" value="Reset Form" onclick="resetForm()"> <input type="submit" value="submit" onclick="showTable()" ><br><br>
+        
+            
+        {% csrf_token %}
+
+    </form>
+    {% if isPresent %}
+    <div id="searchTable">
+        <caption><h1>Details</h1></caption><br>
+        <table border="1", cellspacing="1", cellpadding="10", margin="5", height="5">
+            <thead>
+                <tr>
+                    <td>Name Prefix</td>
+                    <td>User Name</td>
+                    <td>First Name</td>
+                    <td>Last Name</td>
+                    <td width="80">Username</td>
+                    <td>Email Id</td>
+                    <td>Phone Number</td>
+                    <td>Alt. Phone Number</td>
+                    <td>Address</td>
+                    <td>Mother Name</td>
+                    <td>Father Name</td>
+                    <td>Zip Code</td>
+                    <td>Date of Birth</td>
+                    <td> PAN Number</td>
+                    <td>Aadhaar Number</td>
+                    <td>Occupation</td>
+                    <td>Relation</td>
+                    <td>Account Type</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in searchDetails %}
+                <tr>
+                    <td>{{data.namePrefix}}</td>
+                    <td>{{data.firstName}}</td>
+                    <td>{{data.middleName}}</td>
+                    <td>{{data.lastName}}</td>
+                    <td>{{data.username}}</td>
+                    <td>{{data.email}}</td>
+                    <td>{{data.phoneNumber}}</td>
+                    <td>{{data.alternatePhoneNumber}}</td>
+                    <td>{{data.address}}</td>
+                    <td>{{data.motherName}}</td>
+                    <td>{{data.fatherName}}</td>
+                    <td>{{data.zipCode}}</td>
+                    <td>{{data.dateOfBirth}}</td>
+                    <td>{{data.panNumber}}</td>
+                    <td>{{data.aadhaarNumber}}</td>
+                    <td>{{data.occupation}}</td>
+                    <td>{{data.relation}}</td>
+                    <td>{{data.relation}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    <!-- <table>
+        {% for data in searchDetails %}
+            {{data.firstName}}
+        {% endfor %}
+    </table> -->
+
+</body>
+
+</html>

@@ -6,23 +6,57 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.template import RequestContext
 import re
+import random
 from datetime import*
 
 def login(request):
     return render(request, 'VIEWS/login.html', {"":""} )
 
+def searchDetails(request):
+    if request.method=="GET":
+        return render(request, 'VIEWS/searchDetails.html', {"isPresent":False})
+    
+    if request.method=="POST":
+        searchby=request.POST.get('searchby',"")
+        details=request.POST.get('details',"")
+        searchResult = []
+        if searchby=="name":            
+            searchResult = UserDetail.objects.filter(firstName=details).union(
+                UserDetail.objects.filter(lastName=details)
+            ).union(
+                UserDetail.objects.filter(middleName=details)
+            )
+            
+        elif searchby=="phoneNumber":            
+            searchResult = UserDetail.objects.filter(phoneNumber=details).union(
+                UserDetail.objects.filter(alternatePhoneNumber=details)
+            )
+            
+        elif searchby=="panNumber":            
+            searchResult = UserDetail.objects.filter(panNumber=details)
+            
+        elif searchby=="aadhaarNumber":            
+            searchResult = UserDetail.objects.filter(aadhaarNumber=details)
+            
+        print("Data :"+str(searchResult))
+        return render(request, 'VIEWS/searchDetails.html', {"searchDetails": searchResult, "isPresent":True})
+        print("Data :"+str(searchResult))
+        return render(request, 'VIEWS/searchDetails.html', {"searchDetails": searchResult, "isPresent":True})
+        
+
 def home(request):
     return render(request, 'VIEWS/home.html',{"":""})
 
 def form(request):
+    accno=random.randint(100000000000,9995555555555)
     
     # this is for GET method
     if request.method=="GET":
-        return render(request, 'VIEWS/form.html')
+        return render(request, 'VIEWS/form.html',{"":""})
     
     # this is for POST method
     if request.method=='POST':
-        
+            
         namePrefix=request.POST.get('courtsey',"")        
         fname=request.POST.get('firstName',"")
         mname=request.POST.get('middlename',"")
@@ -39,27 +73,45 @@ def form(request):
         aadhaar=request.POST.get('aadhaarNumber',"")
         occupation=request.POST.get('occupation',"")
         relation=request.POST.get('relation',"")
-        accounttype=request.POST.get('MemeberType',"")    
-        myuser = UserDetail()
-        myuser.namePrefix=namePrefix    
-        myuser.firstName=fname            
-        myuser.middleName=mname           
-        myuser.lastName=lname
-        myuser.email=email 
-        myuser.phoneNumber=contact
-        myuser.alternatePhoneNumber=alternatenumber           
-        myuser.address=address            
-        myuser.motherName=mothername            
-        myuser.fatherName=fatherName         
-        myuser.zipCode=pincode            
-        myuser.dateOfBirth=dob            
-        myuser.panNumber=PAN            
-        myuser.aadhaarNumber=aadhaar        
-        myuser.occupation=occupation            
-        myuser.relation=relation         
-        myuser.accountType=accounttype
-        myuser.save()
-        return render(request, 'VIEWS/home.html', {"username":myuser.username})
+        accounttype=request.POST.get('MemeberType',"") 
+          
+         
+        if not UserDetail.objects.filter(panNumber=PAN).exists():
+            print("new pan number")
+        else:
+            return render(request, "VIEWS/form.html", {"error":"PAN Number you have entered is already exist."})
+        
+        if not UserDetail.objects.filter(aadhaarNumber=aadhaar).exists():
+            print("new aadhaar number entered")
+        else:
+            return render(request, "VIEWS/form.html", {"error":"Aadhar Number you have entered already exist."})
+            
+        if not UserDetail.objects.filter(email=email).exists():
+            print("new id found")           
+            
+        else:
+            
+            myuser = UserDetail()
+            
+            myuser.namePrefix=namePrefix    
+            myuser.firstName=fname            
+            myuser.middleName=mname           
+            myuser.lastName=lname
+            myuser.email=email 
+            myuser.phoneNumber=contact
+            myuser.alternatePhoneNumber=alternatenumber           
+            myuser.address=address            
+            myuser.motherName=mothername            
+            myuser.fatherName=fatherName         
+            myuser.zipCode=pincode            
+            myuser.dateOfBirth=dob            
+            myuser.panNumber=PAN            
+            myuser.aadhaarNumber=aadhaar        
+            myuser.occupation=occupation            
+            myuser.relation=relation         
+            myuser.accountType=accounttype
+            myuser.save()
+            return render(request, 'VIEWS/home.html', {"username":myuser.username})
 
 def signup(request):
     if request.method=="GET":
@@ -75,10 +127,24 @@ def signup(request):
         password=request.POST.get('loginpassword',"")
         password1=request.POST.get('loginpassword1',"")
         
-          
-        if not username.isalnum():
-            return render(request, "VIEWS/Signup.html", {"error":"your username must contains only chars and digits"})
         
+        if not UserDetail.objects.filter(email=email).exists():
+            print("hello")
+        else:
+            
+            return render(request, "VIEWS/Signup.html", {"error":"Email Id already exists."})
+            
+        if not UserDetail.objects.filter(phoneNumber=contact):
+            print("new contact found\n")
+        else:
+            return render(request, "VIEWS/Signup.html", {"error":"Contact already exist."})
+          
+        if not UserDetail.objects.filter(username=username).exists():
+            if not username.isalnum():
+                return render(request, "VIEWS/Signup.html", {"error":"your username must contains only chars and digits"})
+        else:
+            return render(request, "VIEWS/Signup.html", {"error":"Username that you have choosen is already exist."})
+                                                         
         if len(address)>250:
             return render(request, "VIEWS/Signup.html", {"error":"Max 250 chars allowed in address"})
             
@@ -89,10 +155,10 @@ def signup(request):
             return render(request, "VIEWS/Signup.html", {"error":"Password length should be between 8 to 64 chars"})
         
         myuser=UserDetail()
-        myuser.UserName=username
+        myuser.username=username
         myuser.firstname=fname
         myuser.lastname=lname
-        myuser.Email=email
+        myuser.email=email
         myuser.save()
         return render(request, "VIEWS/form.html", {"error":""})
     
