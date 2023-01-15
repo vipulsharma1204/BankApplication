@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Transaction</title>
+</head>
+<body>
+    <div class="applicationHeaderNav">
+        <span style="font-size:30px;"><b>Bank Application</b></span>
+        <a href="">Home</a>
+        <a href="login">Login</a>
+        <a href="register">Register</a>
+        <a href="users">Users</a>
+        <a href="manageTransactions">Transaction</a>
+    </div>
+    <form id="transactionForm" method="POST">
+        <span id="errorMessage">{{errorMessage}}</span><br>
+        Sender Account Number :
+        <select id="fromAccount" name="fromAccount" required>
+            {% for account in allAccounts %}
+            <option value="{{account.accountNumber}}">{{account.accountNumber}}</option>
+            {% endfor %}
+        </select><br>
+        Receiver Account Number :
+        <select id="toAccount" name="toAccount"  required>
+            {% for account in allAccounts %}
+            <option value="{{account.accountNumber}}">{{account.accountNumber}}</option>
+            {% endfor %}
+        </select><br>
+        Amount : <input name="amount" id="amount" type="number"><br><br>
+
+        <input style="margin-left:20%;margin-right:5%;" type="Reset" value="reset"><input type="submit" value="Submit">
+        {% csrf_token %}
+    </form>
+    <table id="allAccounts">
+        <tr>
+            <td>Account Number</td><td>Account user</td><td>Account Balance</td>
+        </tr>
+        {% for account in allAccounts %}
+        <tr>
+            <td>{{account.accountNumber}}</td>
+            <td>{{account.accountUser.userName}}</td>
+            <td>{{account.accountBalance}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+<style>
+    #allAccounts{
+        position:absolute;
+        left:10%;
+        top:60%;
+    }
+    #transactionForm{
+        position:absolute;
+        left:25%;
+        top:13%;
+        width:80%;
+    }
+    body{
+        background-color:cyan;
+    }
+    .applicationHeaderNav{
+        position:absolute;
+        top:0px;
+        left:0px;
+        width:100%;
+        height:10%;
+        background-color:blue;
+        padding-top:10px;
+    }
+    .applicationHeaderNav > * {
+        margin-right:30px;
+    }
+    a{
+        text-decoration:none;
+        color:cyan;
+    }
+    #errorMessage{
+        color:red;
+    }
+    td{
+        border:1px solid black;
+    }
+</style>
+</html>

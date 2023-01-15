@@ -1,13 +1,15 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.password_validation import validate_password
 from django.contrib import messages
-from home.models import UserDetail
+from home.models import UserDetail, Transaction, Account
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.template import RequestContext
+from decimal import Decimal
 import re
 import random
 from datetime import*
+from datetime import datetime
 
 def login(request):
     return render(request, 'VIEWS/login.html', {"":""} )
@@ -167,3 +169,35 @@ def signup(request):
 def showUsers(request):
     if request.method=="GET":
         return render(request, "VIEWS/users.html", {"users": UserDetail.objects.all()})
+
+def manageTransactions(request):
+    if request.method=="GET":
+        return render(request, "VIEWS/transactions.html", {
+            "allTransactions":Transaction.objects.all(),
+            "allAccounts" : Account.objects.all()
+        })
+    elif request.method=="POST":
+        fromAccount = Account.objects.filter(accountNumber=request.POST.get("fromAccount"))[0]
+        toAccount = Account.objects.filter(accountNumber=request.POST.get("toAccount"))[0]
+        transaction = Transaction()
+        transaction.transactionDate = datetime.today()
+        transaction.fromAccount = fromAccount
+        transaction.toAccount = toAccount
+        transaction.amount = request.POST.get("amount")
+        fromAccount.accountBalance -= Decimal(transaction.amount)
+        toAccount.accountBalance += Decimal(transaction.amount)
+
+        if fromAccount==toAccount:
+            return render(request, "VIEWS/transactions.html", {
+                "allTransactions": Transaction.objects.all(),
+                "allAccounts": Account.objects.all(),
+                "errorMessage": "From and to accounts can't be same"
+            })
+        transaction.save()
+        fromAccount.save()
+        toAccount.save()
+        print(transaction)
+        return render(request, "VIEWS/transactions.html", {
+            "allTransactions":Transaction.objects.all(),
+            "allAccounts" : Account.objects.all()
+        })
