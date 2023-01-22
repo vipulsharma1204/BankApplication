@@ -7,11 +7,19 @@ from django.contrib.auth.hashers import make_password,check_password
 from django.contrib.auth import authenticate, login
 from django.template import RequestContext
 from decimal import Decimal
+import json
 import re
 import random,string
 from datetime import datetime
 
+def log(data):
+    open("logging.txt","a").write(str(datetime.now())+"\t"+str(data)+"\n")
+
+def jsonParse(cbody):
+    return json.loads(cbody)
+
 def login(request):
+    print(request.POST)
     if request.method=="GET":
         return render(request, 'VIEWS/login.html', {"":""} )
     if request.method=="POST":
@@ -76,10 +84,21 @@ def form(request):
     
     # this is for GET method
     if request.method=="GET":
-        return render(request, 'VIEWS/form.html',{"userData":SignupDetails.objects.all()[0]})
+        log(request.POST)
+        try:
+            return render(request, 'VIEWS/form.html',{"userData":SignupDetails.objects.all()[0]})
+        except:
+            # just for testing environment
+            # Remove when deploying to Prod
+            return render(request, 'VIEWS/form.html',{"userData":{
+                "username":"Anubhav",
+                "firstName":"Anubhav",
+                "lastName":"Anubhav"
+            }})
     
     # this is for POST method
     if request.method=='POST':
+        userObject = jsonParse(request.body)
         
         if not UserDetail.objects.filter(accountNumber=accno).exists():
             accountNumber=accno

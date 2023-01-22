@@ -61,7 +61,7 @@ class SignupDetails(models.Model):
 class CreditRecord(models.Model):
     accountNumber=models.fields.CharField(max_length=16,default="443XXXXXXXXX00")
     amount=models.fields.BigIntegerField()
-    dateoftransac.=models.fields.DateField(default="1900-01-01")
+    dateoftransac=models.fields.DateField(default="1900-01-01")
     
 class DebitRecord(models.Model):
     accountNumber=models.fields.CharField(max_length=16,default="443XXXXXXXXX00")
