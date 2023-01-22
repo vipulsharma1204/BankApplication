@@ -1,18 +1,42 @@
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.password_validation import validate_password
 from django.contrib import messages
-from home.models import UserDetail, Transaction, Account
+from home.models import UserDetail, Transaction, Account,SignupDetails,BankUsers,CreditRecord,DebitRecord
 from django.contrib.auth.models import User
+from django.contrib.auth.hashers import make_password,check_password
 from django.contrib.auth import authenticate, login
 from django.template import RequestContext
 from decimal import Decimal
 import re
-import random
-from datetime import*
+import random,string
 from datetime import datetime
 
 def login(request):
-    return render(request, 'VIEWS/login.html', {"":""} )
+    if request.method=="GET":
+        return render(request, 'VIEWS/login.html', {"":""} )
+    if request.method=="POST":
+        username=request.POST.get('userName',"")
+        password=request.POST.get('password',"")
+                
+        if SignupDetails.objects.filter(username=username):
+            
+            searchResult = SignupDetails.objects.get(username=username)
+                       
+            
+            if searchResult:
+                
+                flag=check_password(password,searchResult.password)
+                
+                if flag:
+                    return render(request, 'VIEWS/form.html',{"userData":searchResult})
+                else:
+                    return render(request, 'VIEWS/login.html',{"error":"Password or Email is Invalid"})
+                    
+                    
+            else:
+                return render(request, 'VIEWS/login.html',{"error":"Password or Email is Invalid"})
+                
+    return render(request, 'VIEWS/login.html', {'error':'Couldn\'t login'})
 
 def searchDetails(request):
     if request.method=="GET":
@@ -42,28 +66,34 @@ def searchDetails(request):
             
         print("Data :"+str(searchResult))
         return render(request, 'VIEWS/searchDetails.html', {"searchDetails": searchResult, "isPresent":True})
-        print("Data :"+str(searchResult))
-        return render(request, 'VIEWS/searchDetails.html', {"searchDetails": searchResult, "isPresent":True})
-        
+                
 
 def home(request):
     return render(request, 'VIEWS/home.html',{"":""})
 
 def form(request):
-    accno=random.randint(100000000000,9995555555555)
+    accno=random.randint(100000000000,900000000000)
     
     # this is for GET method
     if request.method=="GET":
-        return render(request, 'VIEWS/form.html',{"":""})
+        return render(request, 'VIEWS/form.html',{"userData":SignupDetails.objects.all()[0]})
     
     # this is for POST method
     if request.method=='POST':
+        
+        if not UserDetail.objects.filter(accountNumber=accno).exists():
+            accountNumber=accno
+            print(accountNumber)
+        else:
+            accno=random.randint(100000000000,900000000000)
+                
             
         namePrefix=request.POST.get('courtsey',"")        
         fname=request.POST.get('firstName',"")
         mname=request.POST.get('middlename',"")
-        lname=request.POST.get('lastName',"")
+        lname=request.POST.get('{{userData.lastname}}',"")
         email=request.POST.get('email',"")
+        username=request.POST.get('username',"")
         contact=str(request.POST.get('contact',""))
         alternatenumber=str(request.POST.get('alternatenumber',""))        
         address=request.POST.get('address',"")
@@ -75,9 +105,9 @@ def form(request):
         aadhaar=request.POST.get('aadhaarNumber',"")
         occupation=request.POST.get('occupation',"")
         relation=request.POST.get('relation',"")
-        accounttype=request.POST.get('MemeberType',"") 
-          
-         
+        accounttype=request.POST.get('MemeberType',"")
+    
+
         if not UserDetail.objects.filter(panNumber=PAN).exists():
             print("new pan number")
         else:
@@ -89,18 +119,21 @@ def form(request):
             return render(request, "VIEWS/form.html", {"error":"Aadhar Number you have entered already exist."})
             
         if not UserDetail.objects.filter(email=email).exists():
-            print("new id found")           
-            
+            print("new id found")     
         else:
+            pass      
+            
+        
             
             myuser = UserDetail()
-            
+                
             myuser.namePrefix=namePrefix    
             myuser.firstName=fname            
             myuser.middleName=mname           
             myuser.lastName=lname
-            myuser.email=email 
-            myuser.phoneNumber=contact
+            myuser.email=email
+            myuser.username=username
+                
             myuser.alternatePhoneNumber=alternatenumber           
             myuser.address=address            
             myuser.motherName=mothername            
@@ -112,8 +145,10 @@ def form(request):
             myuser.occupation=occupation            
             myuser.relation=relation         
             myuser.accountType=accounttype
+                
             myuser.save()
             return render(request, 'VIEWS/home.html', {"username":myuser.username})
+        return render(request,'VIEWS/login.html',{"":""})
 
 def signup(request):
     if request.method=="GET":
@@ -147,8 +182,8 @@ def signup(request):
         else:
             return render(request, "VIEWS/Signup.html", {"error":"Username that you have choosen is already exist."})
                                                          
-        if len(address)>250:
-            return render(request, "VIEWS/Signup.html", {"error":"Max 250 chars allowed in address"})
+        if len(address)>200:
+            return render(request, "VIEWS/Signup.html", {"error":"Max 200 chars allowed in address"})
             
         if password!=password1:
             return render(request, "VIEWS/Signup.html", {"error":"Password mismatch"})
@@ -156,13 +191,16 @@ def signup(request):
         elif len(password)<=8 or len(password)>=64:
             return render(request, "VIEWS/Signup.html", {"error":"Password length should be between 8 to 64 chars"})
         
-        myuser=UserDetail()
+        myuser=SignupDetails()
         myuser.username=username
         myuser.firstname=fname
         myuser.lastname=lname
         myuser.email=email
+        myuser.address=address
+        myuser.password=make_password(password)
+        myuser.phoneNumber=contact
         myuser.save()
-        return render(request, "VIEWS/form.html", {"error":""})
+        return render(request, "VIEWS/login.html", {"error":""})
     
     return redirect(login)
 
@@ -201,3 +239,87 @@ def manageTransactions(request):
             "allTransactions":Transaction.objects.all(),
             "allAccounts" : Account.objects.all()
         })
+
+
+
+def identify(request):
+    if request.method=="GET":
+        return render(request, "VIEWS/identification.html",{"":""})
+    if request.method=="POST":
+        username=request.POST.get("userName","")
+        password=request.POST.get("password","")
+        if BankUsers.objects.filter(username=username, password=password).exists():
+            return render(request,"VIEWS/home.html",{"error":"Id or Password is incorrect"})
+
+        else:
+            return render(request,"VIEWS/identification.html",{"error":"Id or Password is incorrect"})
+                
+    else:
+        return render(request, "VIEWS/identifiation.html", {"error":"Id or Password is incorrect"})
+
+
+
+def adduser(request):
+    return render(request, 'VIEWS/form.html',{"":""})
+def transaction(request):
+    if request.method=="GET":
+        return render(request,'VIEWS/transactions.html',{"":""})
+def help(request):
+    return render(request, 'VIEWS/help.html', {"":""})
+def update(request):
+    if request.method=="GET":
+        return render(request, 'VIEWS/update.html',{"":""})
+    if request.method=="POST":
+        accountNumber=request.POST.get('account',"")
+        phoneNumber=request.POST.get('phone',"")
+        
+        if searchDetails.objects.filter(accountNumber=accountNumber, phoneNumber=phoneNumber).exist:
+            details=searchDetails.objects.get(accountNumber=accountNumber, phoneNumber=phoneNumber)
+            return render(request, 'VIEWS/update.html', {"userData": details, "isPresent":True})
+        else:
+            return render(request, 'VIEWS/update.html',{"error":"Account Number or Password is incorrect"})
+
+def credit(request):
+    if request.method=="GET":
+        return render(request, 'VIEWS/credit.html',{"":""})
+    if request.method=="POST":
+        
+        accountNumber=request.POST.get('accountNumber',"")
+        amount=request.POST.get('amount',"")
+        if UserDetail.objects.filter(accountNumber=accountNumber).exists():
+            myuser=CreditRecord
+            myuser.accountNumber=accountNumber
+            myuser.amount=amount
+            myuser.dateoftransac=datetime.today()
+            myuser.save()
+            return render(request, 'VIEWS/credit.html',{"":""})
+        else:
+            return render(request,'VIEWS/credit.html',{"error":"account not found"})
+    else:
+        return render(request,'VIEWS/credit.html',{"error":"something went wrong!"})
+            
+            
+        
+        
+def debit(request):
+    if request.method=="GET":
+        return render(request, 'VIEWS/debit.html',{"":""})
+    if request.method=="POST":
+        accountNumber=request.POST.get('accountNumber',"")
+        amount=request.POST.get('amount',"")
+        if UserDetail.objects.filter(accountNumber=accountNumber).exists():
+            myuser=DebitRecord
+            myuser.accountNumber=accountNumber
+            myuser.amount=amount
+            myuser.dateoftransac=datetime.today()
+            myuser.save()
+            return render(request, 'VIEWS/debit.html',{"":""})
+        else:
+            return render(request,'VIEWS/debit.html',{"error":"account not found"})
+    else:
+        return render(request,'VIEWS/debit.html',{"error":"something went wrong!"})
+        
+def updatesuer(request):
+    pass      
+            
+            

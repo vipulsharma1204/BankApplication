@@ -13,6 +13,9 @@
     <style></style>
 </head>
 <script>
+    var datetime=new Date();
+    console.log (datetime);
+    document.getElementById("createdDate").textContent=datetime;
     var resetForm = function(){
       document.getElementById("errorMessage").innerHTML = "";
     }
@@ -27,11 +30,11 @@
             <option value = "Mrs.", name="Mrs." selected>Mrs.</option>
             <option value = "Mr.", name="Mr.">Mr.</option>
             <option value = "Ms.", name="Ms." >Ms.</option>
-            </select><br><br>
+        </select><br><br>
 
 
         <label for="firstName">First Name: </label>
-        <input type="text", name="firstName" pattern="[A-Za-z]{2,56}" placeholder="Enter your first name", required><br><br>
+        <input type="text", name="firstName" id="firstName" pattern="[A-Za-z]{2,56}" disabled value="{{userData.firstname}}" required><br><br>
 
 
         <label for="middlename">Middle Name:</label>
@@ -39,13 +42,16 @@
 
 
         <label for="lastName">Last Name:</label>
-        <input type="text", name="lastName" pattern="[A-Za-z]{2,56}" placeholder="Enter your last name", required><br><br>
+        <input type="text", name="lastName" pattern="[A-Za-z]{2,56}" disabled value="{{userData.lastname}}" required><br><br>
         
         <label for="email">Email Id:</label>
-        <input type="email", name="email" placeholder="Enter your Email id", required><br><br>
+        <input type="email", name="email" placeholder="Enter your Email id" disabled value="{{userData.email}}" required><br><br>
+
+        <label for="username">username:</label>
+        <input type="username", name="email" disabled value="{{userData.username}}" required><br><br>
 
         <label for="conatct">Contact</label>
-        <input type="text" pattern="[\+]{0,1}[0-9]{9,12}" name="contact" required><br><br>
+        <input type="text" pattern="[\+]{0,1}[0-9]{9,12}" name="contact"disabled value="{{userData.phoneNumber}}" required><br><br>
 
 
         <label for="alternatenumber">Alternate Contact</label>
@@ -53,7 +59,7 @@
 
 
         <label for="address">Address:</label>
-        <input type="text" maxlength="256" name="address", placeholder="Enter your address", required><br><br>
+        <input type="text" maxlength="200" name="address", placeholder="{{userData.address}}", value="" disabled required><br><br>
 
 
         <label for="motherName">Mother's Name:</label>
@@ -86,11 +92,9 @@
 
 
         <label for="relation">Relationship with Applicant</label>
-        <input type="text" maxlength=128 name="relation", placeholder="what's your Relationship with Applicant", required><br><br>
+        <input type="text" maxlength=128 name="relation", placeholder="what's your Relationship with Applicant", required><br><br> 
 
 
-        <h6 style="font-family:Arial, Helvetica, sans-serif;">*For legal guardian(guardian appointed by court) else copy of the court order. <br><h5><b>Facilities required (Please mark in appropriatebox/es):</b></h5></h6>
-        
 
         <label for="title">Memeber Type:</label>
         <select name="MemeberType" id="MemeberType">
@@ -105,19 +109,9 @@
             <option value = "Trust/HUF", name="TH" >Trust/HUF</option>
             <option value = "General", name="General" >General</option>
 
-        </select><br><br> -->
+        </select><br><br>
 
-        <label for="text">Relationship</label>
-        <select name="relationship" id="relationship" onchange="">
-        <option value="self", name="self">self</option>
-        <option value="mother", name="mother">mother</option>
-        <option value="Father", name="Father">Father</option>
-        <option value="husband", name="husband">husband</option>
-        <option value="wife", name="wife">wife</option>
-        <option value="grandmother", name="grandmother">grandmother</option>
-        <option value="grandfather", name="grandfather">grandfather</option>
-        </select>
-
+        <h6 style="font-family:Arial, Helvetica, sans-serif;">*For legal guardian(guardian appointed by court) else copy of the court order. <br><h5><b>Facilities required (Please mark in appropriatebox/es):</b></h5></h6>
 
         <input type="reset" value="Reset Form" onclick="resetForm()"> <input type="submit" value="submit"><br><br>
         {% csrf_token %}    

@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
+
         body {
             background-color: teal;
             font-family: Arial, Helvetica, sans-serif;
@@ -30,6 +31,26 @@
             text-align: center;
             
         }
+        label{
+            text-align: center;
+        }
+        a{
+            margin-top: 25vh;
+            padding-right: 15%;
+            padding-top: 5%;
+        }
+        .secondrow{
+            margin-top: 30vh;
+            margin-left: 5%;
+            
+        }
+        #transaction{
+            height: 250px;
+        }
+        #adduser{
+            background-image: url('resources/Add_user.png');
+            
+        }
     </style>
 </head>
 
@@ -40,14 +61,14 @@
         {{username}}
     </h1>
     <div id="applet">
-        <div id="credit", name="credit"></div>
-        <div id="debit" name="debit"></div>
-        <div id="transaction"></div>
-        <div id="searchDetails" name="searchDetails"><a href="searchDetails.html">Search user</a></div>
-        <div id></div>
-        <div></div>
-        
 
+        <h2><a href='adduser'>Add user</a></h2>
+        <a href="credit.html"><img src="resources/account_list.png" alt=""></a>
+        <h2><a href='transaction'>Transation</a></h2>
+        <h2><a href="/help">Help</a></h2>
+        <h2><a href="/update">Update</a></h2>
+        <h2><a href="/credit">Credit</a></h2>
+        <h2><a href="/debit">Debit</a></h2> 
     </div>
 
 
