@@ -54,7 +54,7 @@ CREATE TABLE `home_userdetail` (
   `relation` varchar(50) NOT NULL,
   `accountType` varchar(50) NOT NULL,
   `password` varchar(150) NOT NULL,
-  `namePrefix` datetime(6) NOT NULL,
+  `namePrefix` varchar(6) NOT NULL,
   `panNumber` varchar(10) NOT NULL,
   `id` bigint NOT NULL AUTO_INCREMENT,
   `accountNumber` bigint NOT NULL,
