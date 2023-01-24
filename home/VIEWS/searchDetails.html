@@ -68,6 +68,8 @@
         <table border="1", cellspacing="1", cellpadding="10", margin="5", height="5">
             <thead>
                 <tr>
+                    <td>Account Number</td>
+
                     <td>Name Prefix</td>
                     <td>User Name</td>
                     <td>First Name</td>
@@ -91,6 +93,8 @@
             <tbody>
                 {% for data in searchDetails %}
                 <tr>
+                    <td>{{data.accountNumber}}</td>
+
                     <td>{{data.namePrefix}}</td>
                     <td>{{data.firstName}}</td>
                     <td>{{data.middleName}}</td>

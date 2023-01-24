@@ -72,6 +72,10 @@ def searchDetails(request):
         elif searchby=="aadhaarNumber":            
             searchResult = UserDetail.objects.filter(aadhaarNumber=details)
             
+        elif searchby=="accountNumber":
+            searchResult=UserDetail.objects.filter(accountNumber=details)
+            
+        
         print("Data :"+str(searchResult))
         return render(request, 'VIEWS/searchDetails.html', {"searchDetails": searchResult, "isPresent":True})
                 
@@ -84,47 +88,38 @@ def form(request):
     
     # this is for GET method
     if request.method=="GET":
-        log(request.POST)
-        try:
-            return render(request, 'VIEWS/form.html',{"userData":SignupDetails.objects.all()[0]})
-        except:
-            # just for testing environment
-            # Remove when deploying to Prod
-            return render(request, 'VIEWS/form.html',{"userData":{
-                "username":"Anubhav",
-                "firstName":"Anubhav",
-                "lastName":"Anubhav"
-            }})
+        return render(request, 'VIEWS/form.html',{"userData":SignupDetails.objects.all()[0]})
+
     
     # this is for POST method
     if request.method=='POST':
         userObject = jsonParse(request.body)
-        
+        log(userObject)
         if not UserDetail.objects.filter(accountNumber=accno).exists():
             accountNumber=accno
             print(accountNumber)
         else:
             accno=random.randint(100000000000,900000000000)
                 
-            
-        namePrefix=request.POST.get('courtsey',"")        
-        fname=request.POST.get('firstName',"")
-        mname=request.POST.get('middlename',"")
-        lname=request.POST.get('{{userData.lastname}}',"")
-        email=request.POST.get('email',"")
-        username=request.POST.get('username',"")
-        contact=str(request.POST.get('contact',""))
-        alternatenumber=str(request.POST.get('alternatenumber',""))        
-        address=request.POST.get('address',"")
-        mothername=request.POST.get('motherName',"")
-        fatherName=request.POST.get('fatherName',"")
-        pincode=request.POST.get('pinCode',191)
-        dob=request.POST.get('dob',"")
-        PAN=request.POST.get('panNumber',"")
-        aadhaar=request.POST.get('aadhaarNumber',"")
-        occupation=request.POST.get('occupation',"")
-        relation=request.POST.get('relation',"")
-        accounttype=request.POST.get('MemeberType',"")
+
+        namePrefix=userObject['namePrefix']   
+        fname=userObject['firstName']
+        mname=userObject['middleName']
+        lname=userObject['lastName']
+        email=userObject['email']
+        username=userObject['username']
+        contact=userObject['contact']
+        alternatenumber=userObject['alternateNumber']        
+        address=userObject['address']
+        mothername=userObject['motherName']
+        fatherName=userObject['fatherName']
+        pincode=userObject['zipCode']
+        dob=userObject['dob']
+        PAN=userObject['panNumber']
+        aadhaar=userObject['aadhaarNumber']
+        occupation=userObject['occupation']
+        relation=userObject['relation']
+        accounttype=userObject['MemberType']
     
 
         if not UserDetail.objects.filter(panNumber=PAN).exists():
@@ -144,29 +139,28 @@ def form(request):
             
         
             
-            myuser = UserDetail()
-                
-            myuser.namePrefix=namePrefix    
-            myuser.firstName=fname            
-            myuser.middleName=mname           
-            myuser.lastName=lname
-            myuser.email=email
-            myuser.username=username
-                
-            myuser.alternatePhoneNumber=alternatenumber           
-            myuser.address=address            
-            myuser.motherName=mothername            
-            myuser.fatherName=fatherName         
-            myuser.zipCode=pincode            
-            myuser.dateOfBirth=dob            
-            myuser.panNumber=PAN            
-            myuser.aadhaarNumber=aadhaar        
-            myuser.occupation=occupation            
-            myuser.relation=relation         
-            myuser.accountType=accounttype
-                
-            myuser.save()
-            return render(request, 'VIEWS/home.html', {"username":myuser.username})
+        myuser = UserDetail()
+        myuser.accountNumber=accountNumber     
+        myuser.namePrefix=namePrefix    
+        myuser.firstName=fname            
+        myuser.middleName=mname           
+        myuser.lastName=lname
+        myuser.email=email
+        myuser.username=username
+        myuser.phoneNumber=contact        
+        myuser.alternatePhoneNumber=alternatenumber           
+        myuser.address=address            
+        myuser.motherName=mothername            
+        myuser.fatherName=fatherName         
+        myuser.zipCode=pincode            
+        myuser.dateOfBirth=dob            
+        myuser.panNumber=PAN            
+        myuser.aadhaarNumber=aadhaar        
+        myuser.occupation=occupation            
+        myuser.relation=relation         
+        myuser.accountType=accounttype
+        myuser.save()
+        return render(request, 'VIEWS/home.html', {"username":myuser.username})
         return render(request,'VIEWS/login.html',{"":""})
 
 def signup(request):
@@ -224,8 +218,8 @@ def signup(request):
     return redirect(login)
 
 def showUsers(request):
-    if request.method=="GET":
-        return render(request, "VIEWS/users.html", {"users": UserDetail.objects.all()})
+    
+    return render(request, 'VIEWS/users.html', {"users": UserDetail.objects.all()})
 
 def manageTransactions(request):
     if request.method=="GET":
@@ -285,16 +279,21 @@ def transaction(request):
         return render(request,'VIEWS/transactions.html',{"":""})
 def help(request):
     return render(request, 'VIEWS/help.html', {"":""})
+
 def update(request):
     if request.method=="GET":
         return render(request, 'VIEWS/update.html',{"":""})
     if request.method=="POST":
         accountNumber=request.POST.get('account',"")
         phoneNumber=request.POST.get('phone',"")
+        print(accountNumber,"\t",phoneNumber)
         
-        if searchDetails.objects.filter(accountNumber=accountNumber, phoneNumber=phoneNumber).exist:
-            details=searchDetails.objects.get(accountNumber=accountNumber, phoneNumber=phoneNumber)
+        if UserDetail.objects.filter(accountNumber=accountNumber, phoneNumber=phoneNumber).exists():
+            details=UserDetail.objects.get(accountNumber=accountNumber, phoneNumber=phoneNumber)
+            log("sending details"+str(details))
+            details.dateOfBirth = str(datetime.strptime(str(details.dateOfBirth), "%Y-%m-%d %H:%M:%S"))
             return render(request, 'VIEWS/update.html', {"userData": details, "isPresent":True})
+        
         else:
             return render(request, 'VIEWS/update.html',{"error":"Account Number or Password is incorrect"})
 
@@ -338,7 +337,51 @@ def debit(request):
     else:
         return render(request,'VIEWS/debit.html',{"error":"something went wrong!"})
         
-def updatesuer(request):
-    pass      
+     
             
+def updateUserDetails(request):
+    userObject = jsonParse(request.body)
+    log(userObject)
+    if request.method=="POST":
             
+        namePrefix=userObject['namePrefix']  
+        accountNumber=userObject['accountNumber'] 
+        fname=userObject['firstName']
+        mname=userObject['middleName']
+        lname=userObject['lastName']
+        email=userObject['email']
+        username=userObject['username']
+        contact=userObject['contact']
+        alternatenumber=userObject['alternateNumber']        
+        address=userObject['address']
+        mothername=userObject['motherName']
+        fatherName=userObject['fatherName']
+        pincode=userObject['zipCode']
+        dob=userObject['dob']
+        PAN=userObject['panNumber']
+        aadhaar=userObject['aadhaarNumber']
+        occupation=userObject['occupation']
+        relation=userObject['relation']
+        accounttype=userObject['MemberType']
+        
+        myuser=UserDetail.objects.get(accountNumber=accountNumber)
+        myuser.namePrefix=namePrefix
+        myuser.firstName=fname
+        myuser.middleName=mname
+        myuser.lastName=lname
+        myuser.email=email
+        myuser.username=username
+        myuser.phoneNumber=contact
+        myuser.alternatePhoneNumber=alternatenumber
+        myuser.address=address
+        myuser.motherName=mothername
+        myuser.fatherName=fatherName
+        myuser.zipCode=pincode
+        myuser.dateOfBirth=dob[:10]
+        myuser.panNumber=PAN
+        myuser.aadhaarNumber=aadhaar
+        myuser.occupation=occupation
+        myuser.relation=relation
+        myuser.accountType=accounttype
+        myuser.save()
+        return render(request, 'VIEWS/update.html', {"":""})

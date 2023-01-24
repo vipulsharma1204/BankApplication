@@ -20,7 +20,7 @@
 <body style="background-color:teal ;">
     <h1>Update Details</h1>
     <div id="search" style="text-align: center; background-color: aqua;border-radius: 20vh; margin-left: 25% ;width: 50%;padding: 1%;">
-        <form method="POST" action="searchDetails"><br><br><br>
+        <form method="POST" action="update"><br><br><br>
 
         <label for="account" , required>Enter account Number :</label>
         <input type="text" , name="account" , id="account" placeholder="Enter the details."><br><br><br>
@@ -36,51 +36,135 @@
 
     </form>
     {% if isPresent %}
-    <form>
-        <label for="accounNumber">Account Number: </label>
-        <input type="text", name="accounNumber" pattern="[0-9]{14}" disabled value="{{userData.accountNumber}}" required><br><br>
-
+    <div>
+        <label for="text">courtesy titles</label>
+        <select name = "courtsey" id="namePrefix">
+            <option value = "Mrs.", name="Mrs." selected>Mrs.</option>
+            <option value = "Mr.", name="Mr.">Mr.</option>
+            <option value = "Ms.", name="Ms." >Ms.</option>
+        </select><br><br>
         <label for="firstName">First Name: </label>
-        <input type="text", name="firstName" pattern="[A-Za-z]{2,56}" disabled value="{{userData.firstName}}" required><br><br>
+        <input type="text", name="firstName" id="firstName" pattern="[A-Za-z]{2,56}" value="{{userData.firstName}}" disabled><br><br>
+
+        <label for="accountNumber">Account Number: </label>
+        <input type="text", name="accountNumber" id="accountNumber" pattern="[A-Za-z]{2,56}" value="{{userData.accountNumber}}" disabled><br><br>
+
+
+        <label for="middlename">Middle Name:</label>
+        <input type="text", name="middlename" id="middleName" pattern="[A-Za-z]{2,56}" value="{{userData.middleName}}" disabled><br><br>
+
+
+        <label for="lastName">Last Name:</label>
+        <input type="text", name="lastName" id="lastName" pattern="[A-Za-z]{2,56}" value="{{userData.lastName}}" disabled><br><br>
         
-        <label for="middleName">Middle Name: </label>
-        <input type="text", name="middleName" pattern="[A-Za-z]{2,56}" disabled value="{{userData.middleName}}" required><br><br>
+        <label for="email">Email Id:</label>
+        <input type="email", name="email" id="email" placeholder="Enter your Email id" disabled value="{{userData.email}}" ><br><br>
 
-        <label for="lastName">Last Name: </label>
-        <input type="text", name="lastName" pattern="[A-Za-z]{2,56}" disabled value="{{userData.lastName}}" required><br><br>
+        <label for="username">username:</label>
+        <input type="username", name="username" id="username"  value="{{userData.username}}" disabled><br><br>
 
-        <label for="panNumber">pan Number: </label>
-        <input type="text", name="panNumber" pattern="[A-Za-z0-9]{10}" disabled value="{{userData.panNumber}}" required><br><br>
+        <label for="conatct">Contact</label>
+        <input type="text" id="contact" pattern="[\+]{0,1}[0-9]{9,12}" name="contact" value="{{userData.phoneNumber}}" required><br><br>
 
-        <label for="aadhaarNumber">Aadhaar Number: </label>
-        <input type="text", name="aadhaarNumber" pattern="[0-9]{12}" disabled value="{{userData.aadhaarNumber}}" required><br><br>
 
-        <label for="dateOfBirth">Date Of Birth: </label>
-        <input type="text", name="dateOfBirth" pattern="[A-Za-z]{2,56}" disabled value="{{userData.dateOfBirth}}" required><br><br>
+        <label for="alternatenumber">Alternate Contact</label>
+        <input type="text" id="alternatenumber" pattern="[\+]{0,1}[0-9]{9,12}" name="alternatenumber" value="{{userData.alternatePhoneNumber}}" required><br><br>
 
-        <label for="phoneNumber">Phone Number: </label>
-        <input type="text", name="phoneNumber" pattern="[\+]{0,1}[0-9]{9,12}" value="{{userData.phoneNumber}}" required><br><br>
 
-        <label for="alternatePhoneNumber">Alternate Phone Number: </label>
-        <input type="text", name="alternatePhoneNumber" pattern="[\+]{0,1}[0-9]{9,12}" value="{{userData.alternatePhoneNumber}}" required><br><br>
+        <label for="address">Address:</label>
+        <input type="text" id="address" maxlength="200" name="address", value="{{userData.address}}" required><br><br>
 
-        <label for="address">Address: </label>
-        <input type="text", name="address" maxlength="200" value="{{userData.address}}" required><br><br>
 
-        <label for="zipCode">Zip Code: </label>
-        <input type="text", name="zipCode" pattern="[0-9]{5,10}" value="{{userData.zipCode}}" required><br><br>
+        <label for="motherName">Mother's Name:</label>
+        <input type="text" id="motherName" pattern="[A-Za-z ,]{2,128}"  name="motherName" value="{{userData.motherName}}" disabled><br><br>
 
-        <label for="email">Email: </label>
-        <input type="email", name="email" maxlength="128" value="{{userData.email}}" required><br><br>
+
+        <label for="fatherName">Father's Name:</label>
+        <input type="text" id="fatherName" pattern="[A-Za-z ,]{2,128}" name="fatherName" value="{{userData.fatherName}}" disabled><br><br>
+        
+        
+        <label for="pinCode">Zip Code:</label>
+        <input type="text" id="pinCode" pattern="[0-9]{5,10}" name="pinCode", value="{{userData.zipCode}}" required><br><br>
+
+
+        <label for="dob">D.O.B:</label>
+        <input type="text" name="dob" id="dob"  value="{{userData.dateOfBirth}}" disabled><br><br>
+
+        
+        <label for="panNumber">PAN Number:</label>
+        <input type="text" id="panNumber" pattern="[A-Za-z0-9]{10}" name="panNumber" value="{{userData.panNumber}}" disabled><br><br>
+        
+
+
+        <label for="aadhaarNumber">Aadhaar Number:</label>
+        <input type="text" id="aadhaarNumber" pattern="[0-9]{12}" name="aadhaarNumber" value="{{userData.aadhaarNumber}}" disabled><br><br>
+
+
+        <label for="occupation">Occupation:</label>
+        <input type="text" id="occupation" maxlength=64 name="occupation" value="{{userData.occupation}}" ><br><br>
+
+
+        <label for="relation">Relationship with Applicant</label>
+        <input type="text" id="relation" maxlength=128 name="relation", value="{{userData.relation}}" disabled><br><br> 
+
+
+
+        <label for="title">Memeber Type:</label>
+        <select name="MemeberType" id="MemberType">
+            <option value = "Minor", name="Minor">Minor</option>
+            <option value = "Sr. Citizen", name="Sr. Citizen">Sr. Citizen</option>
+            <option value = "Staff (PF No.)", name="Staff (PF No.)" >Staff (PF No.)</option>
+            <option value = "Pensioner", name="Pensioner" >Pensioner</option>
+            <option value = "NRI", name="foreign" >NRI</option>
+            <option value="NRE" name="NRE">NRE</option>
+            <option value="NRO" name="NRO">NRO</option>
+            <option value="FCNR" name="FCNR">FCNR</option>
+            <option value = "Trust/HUF", name="TH" >Trust/HUF</option>
+            <option value = "General", name="General" >General</option>
+
+        </select><br><br>
 
 
 
         <input type="reset" value="Reset Form" onclick="resetForm()"> 
-        <input type="submit" value="submit"><br><br>
+        <button id="updateUserDetails" onclick="updateUserDetailsSubmit()">Submit</button><br><br>
         {% csrf_token %}    
-    </form>
+    </div>
     {% endif %}
 
 </body>
+<script>
+    var updateUserDetailsSubmit = function(){
+        fetch("/updateUserDetails", {
+            method:"POST",
+            body:JSON.stringify({
+                "namePrefix":document.getElementById("namePrefix").value,
 
+                "accountNumber":document.getElementById("accountNumber").value,
+                "username": document.getElementById("username").value,
+                "firstName":document.getElementById("firstName").value,
+                "middleName":document.getElementById("middleName").value,
+                "lastName":document.getElementById("lastName").value,
+                "email":document.getElementById("email").value,
+                "alternateNumber":document.getElementById("alternatenumber").value,
+                "contact":document.getElementById("contact").value,
+                "MemberType":document.getElementById("MemberType").value,
+                "panNumber":document.getElementById("panNumber").value,
+                "fatherName":document.getElementById("fatherName").value,
+                "motherName":document.getElementById("motherName").value,
+                "address":document.getElementById("address").value,
+                "occupation":document.getElementById("occupation").value,
+                "aadhaarNumber":document.getElementById("aadhaarNumber").value,
+                "dob":document.getElementById("dob").value,
+                "relation":document.getElementById("relation").value,
+                "zipCode":document.getElementById("pinCode").value,
+
+            }),
+            headers:{
+                "content-Type":"application/json"
+            }
+        })
+        .then( json => console.log(json))
+    }
+</script>
 </html>

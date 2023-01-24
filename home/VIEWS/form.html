@@ -13,12 +13,6 @@
     <style></style>
 </head>
 <script>
-    var datetime=new Date();
-    console.log (datetime);
-    document.getElementById("createdDate").textContent=datetime;
-    var resetForm = function(){
-      document.getElementById("errorMessage").innerHTML = "";
-    }
   </script>
 <body>
     <div>
@@ -26,7 +20,7 @@
         <label id="errorMessage", style="color: red;">{{error}}</label><br><br>
 
         <label for="text">courtesy titles</label>
-        <select name = "courtsey">
+        <select name = "courtsey" id="courtsey">
             <option value = "Mrs.", name="Mrs." selected>Mrs.</option>
             <option value = "Mr.", name="Mr.">Mr.</option>
             <option value = "Ms.", name="Ms." >Ms.</option>
@@ -38,40 +32,40 @@
 
 
         <label for="middlename">Middle Name:</label>
-        <input type="text", name="middlename" pattern="[A-Za-z]{2,56}" placeholder="Enter your Middle name",><br><br>
+        <input type="text", name="middlename" id="middleName" pattern="[A-Za-z]{2,56}" placeholder="Enter your Middle name",><br><br>
 
 
         <label for="lastName">Last Name:</label>
-        <input type="text", name="lastName" pattern="[A-Za-z]{2,56}" disabled value="{{userData.lastname}}" required><br><br>
+        <input type="text", name="lastName" id="lastName" pattern="[A-Za-z]{2,56}" disabled value="{{userData.lastname}}" required><br><br>
         
         <label for="email">Email Id:</label>
-        <input type="email", name="email" placeholder="Enter your Email id" disabled value="{{userData.email}}" required><br><br>
+        <input type="email", name="email" id="email" placeholder="Enter your Email id" disabled value="{{userData.email}}" required><br><br>
 
         <label for="username">username:</label>
-        <input type="username", name="email" disabled value="{{userData.username}}" required><br><br>
+        <input type="username", name="username" id="username" disabled value="{{userData.username}}" required><br><br>
 
         <label for="conatct">Contact</label>
-        <input type="text" pattern="[\+]{0,1}[0-9]{9,12}" name="contact"disabled value="{{userData.phoneNumber}}" required><br><br>
+        <input type="text" id="contact" pattern="[\+]{0,1}[0-9]{9,12}" name="contact"disabled value="{{userData.phoneNumber}}" required><br><br>
 
 
         <label for="alternatenumber">Alternate Contact</label>
-        <input type="text" pattern="[\+]{0,1}[0-9]{9,12}" name="alternatenumber" required><br><br>
+        <input type="text" id="alternatenumber" pattern="[\+]{0,1}[0-9]{9,12}" name="alternatenumber" required><br><br>
 
 
         <label for="address">Address:</label>
-        <input type="text" maxlength="200" name="address", placeholder="{{userData.address}}", value="" disabled required><br><br>
+        <input type="text" id="address" maxlength="200" name="address", value="{{userData.address}}" disabled required><br><br>
 
 
         <label for="motherName">Mother's Name:</label>
-        <input type="text" pattern="[A-Za-z ,]{2,128}"  name="motherName", placeholder="Enter your Mother's name", required><br><br>
+        <input type="text" id="motherName" pattern="[A-Za-z ,]{2,128}"  name="motherName", placeholder="Enter your Mother's name", required><br><br>
 
 
         <label for="fatherName">Father's Name:</label>
-        <input type="text" pattern="[A-Za-z ,]{2,128}" name="fatherName", placeholder="Enter your Father's name", required><br><br>
+        <input type="text" id="fatherName" pattern="[A-Za-z ,]{2,128}" name="fatherName", placeholder="Enter your Father's name", required><br><br>
         
         
         <label for="pinCode">Zip Code:</label>
-        <input type="text" pattern="[0-9]{5,10}" name="pinCode", placeholder="Enter your Zip Code", required><br><br>
+        <input type="text" id="pinCode" pattern="[0-9]{5,10}" name="pinCode", placeholder="Enter your Zip Code", required><br><br>
 
 
         <label for="dob">D.O.B:</label>
@@ -79,25 +73,25 @@
 
         
         <label for="panNumber">PAN Number:</label>
-        <input type="text" pattern="[A-Za-z0-9]{10}" name="panNumber", placeholder="Enter your PAN Number", required><br><br>
+        <input type="text" id="panNumber" pattern="[A-Za-z0-9]{10}" name="panNumber", placeholder="Enter your PAN Number", required><br><br>
         
 
 
         <label for="aadhaarNumber">Aadhaar Number:</label>
-        <input type="text" pattern="[0-9]{12}" name="aadhaarNumber", placeholder="Enter your Aadhaar Number", required><br><br>
+        <input type="text" id="aadhaarNumber" pattern="[0-9]{12}" name="aadhaarNumber", placeholder="Enter your Aadhaar Number", required><br><br>
 
 
         <label for="occupation">Occupation:</label>
-        <input type="text" maxlength=64 name="occupation", placeholder="what's your Occupation", required><br><br>
+        <input type="text" id="occupation" maxlength=64 name="occupation", placeholder="what's your Occupation", required><br><br>
 
 
         <label for="relation">Relationship with Applicant</label>
-        <input type="text" maxlength=128 name="relation", placeholder="what's your Relationship with Applicant", required><br><br> 
+        <input type="text" id="relation" maxlength=128 name="relation", placeholder="what's your Relationship with Applicant", required><br><br> 
 
 
 
         <label for="title">Memeber Type:</label>
-        <select name="MemeberType" id="MemeberType">
+        <select name="MemeberType" id="MemberType">
             <option value = "Minor", name="Minor">Minor</option>
             <option value = "Sr. Citizen", name="Sr. Citizen">Sr. Citizen</option>
             <option value = "Staff (PF No.)", name="Staff (PF No.)" >Staff (PF No.)</option>
@@ -123,7 +117,26 @@
         fetch("/form", {
             method:"POST",
             body:JSON.stringify({
-                username: "Anubhav"
+                "namePrefix":document.getElementById("courtsey").value,
+                "username": document.getElementById("username").value,
+                "firstName":document.getElementById("firstName").value,
+                "middleName":document.getElementById("middleName").value,
+                "lastName":document.getElementById("lastName").value,
+                "email":document.getElementById("email").value,
+                "alternateNumber":document.getElementById("alternatenumber").value,
+                "contact":document.getElementById("contact").value,
+                "MemberType":document.getElementById("MemberType").value,
+                "panNumber":document.getElementById("panNumber").value,
+                "fatherName":document.getElementById("fatherName").value,
+                "motherName":document.getElementById("motherName").value,
+                "address":document.getElementById("address").value,
+                "occupation":document.getElementById("occupation").value,
+                "aadhaarNumber":document.getElementById("aadhaarNumber").value,
+                "dob":document.getElementById("dob").value,
+                "relation":document.getElementById("relation").value,
+                "zipCode":document.getElementById("pinCode").value,
+             
+
             }),
             headers:{
                 "Content-Type":"application/json"
@@ -135,10 +148,10 @@
         let dt = document.getElementById("dob").value
         let diff = (new Date() - new Date(dt))/(1000*3600*24*365);
         if(diff<18){
-            document.getElementById("Memeber_Type").value = "Minor";
+            document.getElementById("MemberType").value = "Minor";
         }
         else if(diff>59 && diff<80){
-            document.getElementById("Memeber_Type").value = "Sr. Citizen";
+            document.getElementById("MemberType").value = "Sr. Citizen";
         }
         
     }

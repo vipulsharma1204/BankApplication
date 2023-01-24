@@ -6,10 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Users | Bank</title>
 </head>
-<body>
-    <table>
+<body action="showusers">
+    <table border="1", cellspacing="1", cellpadding="10", margin="5", height="5">
         <thead>
             <tr>
+                <td>Account Number</td>
+
                 <td>Name Prefix</td>
                 <td>User Name</td>
                 <td>First Name</td>
@@ -33,6 +35,7 @@
         <tbody>
             {% for user in users %}
             <tr>
+                <td>{{user.accountNumber}}</td>
                 <td>{{user.namePrefix}}</td>
                 <td>{{user.firstName}}</td>
                 <td>{{user.middleName}}</td>
@@ -50,7 +53,7 @@
                 <td>{{user.aadhaarNumber}}</td>
                 <td>{{user.occupation}}</td>
                 <td>{{user.relation}}</td>
-                <td>{{user.relation}}</td>
+                <td>{{user.accountType}}</td>
                 
             </tr>
             {% endfor %}
